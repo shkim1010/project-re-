@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <title>학교 시간표 웹 - 로그인/회원가입</title>
+  <title>학교 시간표 웹 - 로그인 / 회원가입</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&family=Playfair+Display:wght@700&display=swap');
 
@@ -39,7 +39,7 @@
       align-items: center;
     }
 
-    h1, h2 {
+    h1 {
       font-family: 'Playfair Display', serif;
       font-weight: 700;
       color: #6a4f4b;
@@ -48,9 +48,8 @@
       letter-spacing: 0.05em;
     }
 
-    .login-box input[type="text"],
-    .login-box input[type="password"],
-    .login-box input[type="text"].class-input {
+    input[type="text"],
+    input[type="password"] {
       width: 100%;
       padding: 16px 20px;
       margin-bottom: 20px;
@@ -65,16 +64,15 @@
       box-sizing: border-box;
     }
 
-    .login-box input[type="text"]:focus,
-    .login-box input[type="password"]:focus,
-    .login-box input[type="text"].class-input:focus {
+    input[type="text"]:focus,
+    input[type="password"]:focus {
       border-color: #a87e6f;
       outline: none;
       box-shadow: 0 0 10px rgba(168, 126, 111, 0.5);
       background: #fff;
     }
 
-    .login-box button {
+    button {
       width: 100%;
       padding: 18px 0;
       background: #a87e6f;
@@ -89,29 +87,78 @@
       margin-bottom: 12px;
     }
 
-    .login-box button:hover {
+    button:hover {
       background: #856451;
       box-shadow: 0 12px 30px rgba(133, 100, 81, 0.7);
+    }
+
+    #signupForm {
+      display: none;
+      width: 100%;
+      margin-top: 20px;
+    }
+
+    #signupForm input[type="text"] {
+      margin-bottom: 16px;
+    }
+
+    #showSignupBtn {
+      width: auto;
+      padding: 8px 20px;
+      background: transparent;
+      color: #a87e6f;
+      font-weight: 600;
+      font-size: 14px;
+      box-shadow: none;
+      border: 2px solid #a87e6f;
+      border-radius: 14px;
+      cursor: pointer;
+      transition: background 0.3s ease, color 0.3s ease;
+      margin-top: 0;
+    }
+
+    #showSignupBtn:hover {
+      background: #a87e6f;
+      color: #fffdfa;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <div class="login-box">
-      <h1>로그인 / 회원가입</h1>
-      <input id="idInput" type="text" placeholder="아이디" />
-      <input id="pwInput" type="password" placeholder="비밀번호" />
-      <input id="classInput" class="class-input" type="text" placeholder="학년-반 (예: 1-3)" />
-      <button onclick="signup()">회원가입</button>
-      <button onclick="login()">로그인</button>
+    <h1>로그인</h1>
+
+    <!-- 로그인 폼 -->
+    <input id="loginId" type="text" placeholder="아이디" />
+    <input id="loginPw" type="password" placeholder="비밀번호" />
+    <button onclick="login()">로그인</button>
+
+    <!-- 회원가입 버튼 (작게) -->
+    <button id="showSignupBtn" onclick="toggleSignup()">회원가입</button>
+
+    <!-- 회원가입 폼 (숨김) -->
+    <div id="signupForm">
+      <h1>회원가입</h1>
+      <input id="signupId" type="text" placeholder="아이디" />
+      <input id="signupPw" type="password" placeholder="비밀번호" />
+      <input id="signupClass" type="text" placeholder="학년-반 (예: 1-3)" />
+      <button onclick="signup()">회원가입 완료</button>
     </div>
   </div>
 
   <script>
+    function toggleSignup() {
+      const form = document.getElementById('signupForm');
+      if (form.style.display === 'none' || form.style.display === '') {
+        form.style.display = 'block';
+      } else {
+        form.style.display = 'none';
+      }
+    }
+
     function signup() {
-      const id = document.getElementById('idInput').value.trim();
-      const pw = document.getElementById('pwInput').value.trim();
-      const userClass = document.getElementById('classInput').value.trim();
+      const id = document.getElementById('signupId').value.trim();
+      const pw = document.getElementById('signupPw').value.trim();
+      const userClass = document.getElementById('signupClass').value.trim();
 
       if (!id || !pw || !userClass) {
         alert('아이디, 비밀번호, 학년-반 모두 입력하세요.');
@@ -138,8 +185,8 @@
     }
 
     function login() {
-      const id = document.getElementById('idInput').value.trim();
-      const pw = document.getElementById('pwInput').value.trim();
+      const id = document.getElementById('loginId').value.trim();
+      const pw = document.getElementById('loginPw').value.trim();
 
       let users = JSON.parse(localStorage.getItem('users') || '{}');
 
