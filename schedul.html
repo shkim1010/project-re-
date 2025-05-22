@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>시간표 및 수행평가</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap');
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      background: linear-gradient(135deg, #fdf6f0, #f7e8dc);
+      font-family: 'Montserrat', sans-serif;
+      color: #4b3b2b;
+      box-sizing: border-box;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 40px 20px;
+    }
+
+    .container {
+      background-color: #fffdfa;
+      border-radius: 24px;
+      box-shadow: 0 16px 40px rgba(75, 59, 43, 0.15);
+      width: 480px;
+      max-width: 95vw;
+      padding: 48px 36px;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    h1 {
+      font-weight: 700;
+      margin-bottom: 32px;
+      font-size: 28px;
+      text-align: center;
+      letter-spacing: 0.05em;
+    }
+
+    table {
+      border-collapse: separate;
+      border-spacing: 0;
+      border-radius: 20px;
+      overflow: hidden;
+      width: 100%;
+      margin-top: 32px;
+      font-size: 18px;
+      color: #6a4f4b;
+      box-shadow: 0 12px 30px rgba(168, 126, 111, 0.15);
+      background-color: #fffdfa;
+    }
+
+    thead tr {
+      background: #a87e6f;
+      color: #fffdfa;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+    }
+
+    thead th {
+      padding: 18px 16px;
+      text-align: center;
+    }
+
+    tbody td {
+      padding: 14px 16px;
+      background-color: #f6f1ec;
+      text-align: center;
+      font-weight: 600;
+      border-bottom: 1px solid #d8cfc6;
+    }
+
+    tbody tr:hover {
+      background-color: #ede5dd;
+    }
+
+    ul.task-list {
+      margin-top: 32px;
+      padding-left: 24px;
+      color: #856451;
+      font-weight: 700;
+      font-size: 18px;
+      line-height: 1.5;
+      list-style-type: disc;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1 id="classTitle">시간표 및 수행평가</h1>
+    <div id="schedule"></div>
+  </div>
+
+  <script>
+    // 로그인 또는 회원가입 없이 schedule.html 접속 시 이동 방지
+    const loggedInUser = localStorage.getItem('loggedInUser');
+    if (!loggedInUser) {
+      alert('로그인이 필요합니다.');
+      window.location.href = 'index.html';
+    }
+
+    const selectedClass = localStorage.getItem('selectedClass');
+    document.getElementById('classTitle').textContent = `${selectedClass} 반 시간표`;
+
+    // 시간표 데이터
+    const timetable = {
+      "1-1": {
+        "월요일": ["국어", "수학", "과학", "영어", "체육"],
+        "화요일": ["수학", "영어", "국어", "사회", "미술"],
+        "수요일": ["과학", "체육", "영어", "음악", "수학"],
+        "목요일": ["사회", "국어", "과학", "수학", "영어"],
+        "금요일": ["영어", "미술", "체육", "과학", "국어"]
+      },
+      "1-2": {
+        "월요일": ["영어", "수학", "국어", "음악", "체육"],
+        "화요일": ["과학", "수학", "미술", "영어", "사회"],
+        "수요일": ["체육", "음악", "국어", "수학", "과학"],
+        "목요일": ["미술", "사회", "영어", "체육", "국어"],
+        "금요일": ["수학", "국어", "과학", "음악", "체육"]
+      }
+      // 필요에 따라 다른 반 추가 가능
+    };
+
+    // 수행평가 일정 데이터
+    const tasks = {
+      "1-1": ["국어 수행평가: 6월 10일", "수학 수행평가: 7월 15일"],
+      "1-2": ["영어 수행평가: 6월 12일"]
+    };
+
+    const container = document.getElementById('schedule');
+
+    if (timetable[selectedClass]) {
+      let tableHTML = `<table><thead><tr><th>교시/요일</th>`;
+      const days = ["월요일", "화요일", "수요일", "목요일", "금요일"];
+      days.forEach(day => {
+        tableHTML += `<th>${day}</th>`;
+      });
+      tableHTML += `</tr></thead><tbody>`;
+
+      for (let period = 0; period < 5; period++) {
+        tableHTML += `<tr><td>${period + 1}교시</td>`;
+        days.forEach(day => {
+          const subject = timetable[selectedClass][day][period] || "";
+          tableHTML += `<td>${subject}</td>`;
+        });
+        tableHTML += `</tr>`;
+      }
+
+      tableHTML += `</tbody></table>`;
+      container.innerHTML += tableHTML;
+    } else {
+      container.innerHTML += "<p>시간표가 없습니다.</p>";
+    }
+
+    if (tasks[selectedClass]) {
+      container.innerHTML += "<ul class='task-list'>";
+      tasks[selectedClass].forEach(task => {
+        container.innerHTML += `<li>${task}</li>`;
+      });
+      container.innerHTML += "</ul>";
+    }
+  </script>
+</body>
+</html>
